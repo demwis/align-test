@@ -12,6 +12,7 @@ Write a simple inventory management system. User should be able to:
 * Brand
 * Price
 * Quantity
+
 It should be two users - admin (can create, add, remove) and user with read-only access.
 
 # Non-functional requirements
