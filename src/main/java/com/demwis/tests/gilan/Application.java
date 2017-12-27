@@ -14,7 +14,6 @@ import org.springframework.context.annotation.ComponentScan;
  * 4. Export search result as an xls file
  * 5. Add basic level of logging
  * 6. Exceptions layering and mapping
- * 7. Rights segregation
  * 8. Use AOP for logging incoming queries
  */
 @SpringBootApplication
