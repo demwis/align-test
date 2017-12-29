@@ -21,13 +21,16 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
 
+    private final ConfigProperties configProperties;
+
     @Autowired
-    public WebSecurityConfig(@Qualifier("userServiceImpl") UserDetailsService userDetailsService) {
+    public WebSecurityConfig(@Qualifier("userServiceImpl") UserDetailsService userDetailsService, ConfigProperties configProperties) {
         this.userDetailsService = userDetailsService;
+        this.configProperties = configProperties;
     }
 
     @Bean
@@ -42,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .httpBasic()
-                .realmName("Gilan Test")
+                .realmName(configProperties.getAuthRealm())
                 .and()
                 .csrf()
                 .disable();
@@ -56,13 +59,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(11);
+        return new BCryptPasswordEncoder(configProperties.getAuthPasswordStrength());
     }
 
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setSigningKey("key");
+        converter.setSigningKey(configProperties.getAuthSigningKey());
         return converter;
     }
 
@@ -72,7 +75,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-//    TODO @Primary
     public DefaultTokenServices tokenServices() {
         DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setTokenStore(tokenStore());

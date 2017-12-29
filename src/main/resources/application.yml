@@ -1,2 +1,9 @@
-security:
-  oauth2.resource.filter-order: 3
+auth.client: "gilanjwt"
+auth.secret: "secret"
+auth.grantType: "password"
+auth.resourceId: "gilanjwtresourceid"
+auth.realm: "Gilan test"
+auth.signing-key: "somekey"
+auth.passwordStrength: 11
+
+security.oauth2.resource.filter-order: 3

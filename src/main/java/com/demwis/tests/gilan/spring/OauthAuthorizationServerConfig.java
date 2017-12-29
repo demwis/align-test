@@ -22,22 +22,25 @@ public class OauthAuthorizationServerConfig extends AuthorizationServerConfigure
 
     private final AuthenticationManager authenticationManager;
 
+    private final ConfigProperties configProperties;
+
     @Autowired
-    public OauthAuthorizationServerConfig(TokenStore tokenStore, JwtAccessTokenConverter accessTokenConverter, AuthenticationManager authenticationManager) {
+    public OauthAuthorizationServerConfig(TokenStore tokenStore, JwtAccessTokenConverter accessTokenConverter, AuthenticationManager authenticationManager, ConfigProperties configProperties) {
         this.tokenStore = tokenStore;
         this.accessTokenConverter = accessTokenConverter;
         this.authenticationManager = authenticationManager;
+        this.configProperties = configProperties;
     }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients
                 .inMemory()
-                .withClient("gilanjwt")
-                .secret("secret")
-                .authorizedGrantTypes("password")
+                .withClient(configProperties.getAuthClient())
+                .secret(configProperties.getAuthSecret())
+                .authorizedGrantTypes(configProperties.getAuthGrantType())
                 .scopes("read", "write")
-                .resourceIds("gilanjwtresourceid");
+                .resourceIds(configProperties.getAuthResourceId());
     }
 
     @Override

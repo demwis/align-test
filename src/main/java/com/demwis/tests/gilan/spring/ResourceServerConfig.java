@@ -13,14 +13,17 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     private final ResourceServerTokenServices tokenServices;
 
+    private final ConfigProperties configProperties;
+
     @Autowired
-    public ResourceServerConfig(ResourceServerTokenServices tokenServices) {
+    public ResourceServerConfig(ResourceServerTokenServices tokenServices, ConfigProperties configProperties) {
         this.tokenServices = tokenServices;
+        this.configProperties = configProperties;
     }
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-        resources.resourceId("gilanjwtresourceid")
+        resources.resourceId(configProperties.getAuthResourceId())
                 .tokenServices(tokenServices);
     }
 
